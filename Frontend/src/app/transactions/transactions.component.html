@@ -1,0 +1,58 @@
+<div class="container-fluid" style="overflow: hidden; position:absolute; top: 40px; bottom: 0px">
+  <div class="row card"  style="margin: 2%; overflow: hidden; height: 46%;">
+    <div class="card-body" style="width: 100%;">
+      <h5 class="card-title">Onetime Transactions</h5>
+      <div style="height: 80%; overflow: auto">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Description</th>
+            <th scope="col">Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let t of data.onetimeTransactions$ | async; index as i">
+            <th scope="row">{{ t.id }}</th>
+            <td>{{ t.date | date: 'yyyy-MM-dd' }}</td>
+            <td>{{ t.description }}</td>
+            <td>{{ t.amount | number }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <button type="button" class="btn btn-primary" style="margin: 1rem; height: 40px; position: absolute; left: 0px; bottom: 0px">Add</button>
+
+    </div>
+  </div>
+  <div class="row card"  style="margin: 2%; overflow: hidden; height: 46%;">
+    <div class="card-body" style="width: 100%;">
+      <h5 class="card-title">Onetime Transactions</h5>
+      <div style="height: 80%; overflow: auto">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Description</th>
+            <th scope="col">Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let t of data.onetimeTransactions$ | async; index as i">
+            <th scope="row">{{ t.id }}</th>
+            <td>{{ t.date  | date: 'yyyy-MM-dd' }}</td>
+            <td>{{ t.description }}</td>
+            <td>{{ t.amount | number }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <button type="button" class="btn btn-primary" style="margin: 1rem; height: 40px; position: absolute; left: 0px; bottom: 0px">Add</button>
+
+    </div>
+  </div>
+</div>

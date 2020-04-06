@@ -26,6 +26,14 @@ namespace ZanyCash
 
             
             var transactionReadState = events.Scan(TransactionReadModel.GetInitialState(), TransactionReadModel.HandleEvent);
+            var transactionWriteState = events.Scan(TransactionWriteModel.GetInitialState(), (state, evt) =>
+            {
+                var (newState, newEvent) = TransactionWriteModel.HandleEvent(state, evt);
+                if (newEvent != null)
+                    sideEffectEvents.OnNext(newEvent.Value);
+
+                return newState;
+            });
             var liquidityReadState = events.Scan(LiquidityReadModel.GetInitialState(), LiquidityReadModel.HandleEvent);
             var liquidityWriteState = events.Scan(LiquidityWriteModel.GetInitialState(), (state, evt) =>
             {
@@ -51,6 +59,11 @@ namespace ZanyCash
                 // Persist State
             });
 
+            transactionWriteState.Subscribe(s =>
+            {
+                // Persist state
+            });
+
             var t = transactionReadState.Select(s => s.Transactions).Replay(1);
             this.Transactions = t;
             t.Connect();
@@ -59,6 +72,11 @@ namespace ZanyCash
         public void AddOnetimeTransaction(OnetimeTransaction t)
         {
             commands.OnNext(NewCreateTransactionCommand(new Actions.CreateTransaction(Transaction.NewOnetimeTransaction(t))));
+        }
+
+        public void DeleteOnetimeTransaction(string id)
+        {
+            commands.OnNext(NewDeleteTransactionCommand(new Actions.DeleteTransaction(id)));
         }
     }
 }

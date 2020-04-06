@@ -23,7 +23,7 @@ namespace ZanyStreams
         public void ConnectToStream(string streamName)
         {
             var connectionId = this.Context.ConnectionId;
-            var stream = GetStream(connectionId, streamName);
+            var stream = GetStream("123", streamName);
             stream.Subscribe(x => this.context.Clients.Client(connectionId).SendAsync(streamName, x));
         }
 
@@ -34,7 +34,7 @@ namespace ZanyStreams
 
         private IObservable<Result> GetStream(string scopeName, string streamName)
         {
-            var publishers = this.serviceLocator.GetServices<IStreamPublisher>("123");
+            var publishers = this.serviceLocator.GetServices<IStreamPublisher>(scopeName);
             var allStreams = publishers.SelectMany(p => p.GetStreams());
             try
             {

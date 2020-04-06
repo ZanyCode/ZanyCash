@@ -17,8 +17,7 @@ let HandleEvent (state: State) = function
         let updatedTransactionList = state.Transactions |> List.map (fun t -> if t |> GetId = idToUpdate then e.Transaction else t)
         {state with Transactions = updatedTransactionList}
     | TransactionDeletedEvent e ->
-        let idToDelete = e.Transaction |> GetId
-        let updatedTransactionList = state.Transactions |> List.filter (fun t -> t |> GetId <> idToDelete)
+        let updatedTransactionList = state.Transactions |> List.filter (fun t -> t |> GetId <> e.Id)
         { state with Transactions = updatedTransactionList }
     | _ -> state
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.FSharp.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -79,6 +80,23 @@ namespace ZanyCash.Glue
             return enumValues[selectedIdx];
         }
 
+        public static PaymentIntervalType ToDomain(this PaymentIntervalTypeModel @this)
+        {
+            switch(@this)
+            {
+                case PaymentIntervalTypeModel.daily:
+                    return PaymentIntervalType.Daily;
+                case PaymentIntervalTypeModel.weekly:
+                    return PaymentIntervalType.Weekly;
+                case PaymentIntervalTypeModel.monthly:
+                    return PaymentIntervalType.Monthly;
+                case PaymentIntervalTypeModel.yearly:
+                    return PaymentIntervalType.Yearly;
+            }
+
+            throw new Exception("Invalid enum value when mapping to domain: " + @this);
+        }
+
         public static PaymentIntervalModel ToModel(this PaymentInterval @this)
         {
             return new PaymentIntervalModel
@@ -88,6 +106,11 @@ namespace ZanyCash.Glue
             };
         }
 
+        public static PaymentInterval ToDomain(this PaymentIntervalModel @this)
+        {
+            return PaymentInterval.NewPaymentInterval(@this.interval, @this.intervalType.ToDomain());
+        }
+
         public static PaymentAmountModel ToModel(this PaymentAmount @this)
         {
             return new PaymentAmountModel
@@ -95,6 +118,11 @@ namespace ZanyCash.Glue
                 amount = @this.Amount,
                 date = @this.Date
             };
+        }
+
+        public static PaymentAmount ToDomain(this PaymentAmountModel @this)
+        {
+            return new PaymentAmount(@this.date, @this.amount);
         }
 
         public static TransactionModel ToModel(this Transaction @this)
@@ -125,6 +153,25 @@ namespace ZanyCash.Glue
             }
 
             throw new Exception("Error while mapping transaction: Invalid case");
+        }
+    
+        public static OnetimeTransaction ToDomain(this OnetimeTransactionModel @this)
+        {
+            return new OnetimeTransaction(@this.id, @this.date, @this.description, @this.amount);
+        }
+
+        public static RecurringTransaction ToDomain(this RecurringTransactionModel @this)
+        {
+            var amounts = ListModule.OfSeq(@this.amounts.Select(x => x.ToDomain()));
+            return new RecurringTransaction(@this.id, @this.endDate, @this.description, @this.interval.ToDomain(), amounts);
+        }
+
+        public static Transaction ToDomain(this TransactionModel @this)
+        {
+            return @this.isOnetimeTransaction ?
+                Transaction.NewOnetimeTransaction(@this.onetimeTransaction.ToDomain()) :
+                Transaction.NewRecurringTransaction(@this.recurringTransaction.ToDomain());
+
         }
     }
 }

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { AddTransactionComponent } from './add-transaction/add-transaction.component';
+import { OkCancelDialogComponent } from './ok-cancel-dialog/ok-cancel-dialog.component';
+
 const routes: Routes = [
   { path: '', redirectTo: '/transactions', pathMatch: 'full' },
   { path: 'transactions', component:  TransactionsComponent},

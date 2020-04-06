@@ -12,6 +12,11 @@ let GetId = function
     | RecurringTransaction r -> r.Id
     | OnetimeTransaction r -> r.Id
 
+let SetId transaction id =
+    match transaction with
+    | RecurringTransaction r -> RecurringTransaction {r with Id=id}
+    | OnetimeTransaction r -> OnetimeTransaction {r with Id=id}
+
 let GetStartDate = function
     | RecurringTransaction r -> r.Amounts 
                                 |> List.sortBy (fun a -> a.Date) 

@@ -37,7 +37,7 @@ type Balance = { Date: DateTime; Amount: float }
 module Actions =
     type CreateTransaction = { Transaction: Transaction }
     type UpdateTransaction = { Transaction: Transaction }
-    type DeleteTransaction = { Transaction: Transaction }
+    type DeleteTransaction = { Id: string }
 
 type Command = 
     | CreateTransactionCommand of Actions.CreateTransaction
@@ -47,6 +47,7 @@ type Command =
 
 type Event = 
     | Nothing
+    | TransactionCreationRequestedEvent of Actions.CreateTransaction
     | TransactionCreatedEvent of Actions.CreateTransaction
     | TransactionUpdatedEvent of Actions.UpdateTransaction
     | TransactionDeletedEvent of Actions.DeleteTransaction

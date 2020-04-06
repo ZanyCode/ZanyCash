@@ -34,8 +34,7 @@ let HandleEvent (state: State) = function
         let newState = {state with Transactions = updatedTransactionList}
         newState,Some (generateLiquidityUpdatedEvent newState)
     | TransactionDeletedEvent e ->
-        let idToDelete = e.Transaction |> GetId
-        let updatedTransactionList = state.Transactions |> List.filter (fun t -> t |> GetId <> idToDelete)
+        let updatedTransactionList = state.Transactions |> List.filter (fun t -> t |> GetId <> e.Id)
         let newState = { state with Transactions = updatedTransactionList }
         newState,Some (generateLiquidityUpdatedEvent newState)
     | _ -> state,None

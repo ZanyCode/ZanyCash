@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using ZanyCash.Glue;
 using ZanyStreams;
 using static ZanyCash.Core.Types;
+using static ZanyCash.Core.Types.Command;
 
 namespace ZanyCash.Controllers
 {
@@ -25,14 +26,24 @@ namespace ZanyCash.Controllers
         public void AddOnetimeTransaction([FromBody] OnetimeTransactionModel transaction, [FromHeader(Name ="ConnectionId")]string connectionId)
         {
             var core = serviceLocator.GetRequiredService<CoreAdapter>(connectionId);
-            core.AddOnetimeTransaction(transaction.ToDomain());
+            var command = NewCreateTransactionCommand(new Actions.CreateTransaction(Transaction.NewOnetimeTransaction(transaction.ToDomain())));
+            core.RunCommand(command);
+        }
+
+        [HttpPut("onetime-transaction")]
+        public void UpdateOnetimeTransaction([FromBody] OnetimeTransactionModel transaction, [FromHeader(Name = "ConnectionId")]string connectionId)
+        {
+            var core = serviceLocator.GetRequiredService<CoreAdapter>(connectionId);
+            var command = NewUpdateTransactionCommand(new Actions.UpdateTransaction(Transaction.NewOnetimeTransaction(transaction.ToDomain())));
+            core.RunCommand(command);
         }
 
         [HttpDelete("onetime-transaction/{id}")]
         public void DeleteOnetimeTransaction(string id, [FromHeader(Name = "ConnectionId")]string connectionId)
         {
             var core = serviceLocator.GetRequiredService<CoreAdapter>(connectionId);
-            core.DeleteOnetimeTransaction(id);
+            var command = NewDeleteTransactionCommand(new Actions.DeleteTransaction(id));
+            core.RunCommand(command);
         }
     }
 }

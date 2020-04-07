@@ -32,7 +32,6 @@ namespace ZanyCash.Controllers
         public void Get()
         {
             var core = serviceLocator.GetRequiredService<CoreAdapter>("123");
-            core.AddOnetimeTransaction(new OnetimeTransaction("aa", DateTime.Now, "Wasgeht", 69.0));
         }
     }
 }

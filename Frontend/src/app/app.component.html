@@ -2,7 +2,7 @@
 <nav mat-tab-nav-bar style="position: fixed; height: 3rem; width: 100%;">
   <a mat-tab-link
   *ngFor="let link of navLinks"
-  [routerLink]="link.link"
+  [routerLink]="link.path"
   routerLinkActive #rla="routerLinkActive"
   [active]="rla.isActive">
   {{link.label}}

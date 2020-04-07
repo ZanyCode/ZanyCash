@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AddTransactionComponent } from './add-transaction/add-transaction.component';
+import { SetTransactionComponent } from './set-transaction/set-transaction.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSortModule} from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -25,7 +25,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 @NgModule({
   declarations: [
     AppComponent,
-    AddTransactionComponent,
+    SetTransactionComponent,
     TransactionsComponent,
     OkCancelDialogComponent
   ],

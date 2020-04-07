@@ -5,6 +5,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { OkCancelDialogComponent } from '../ok-cancel-dialog/ok-cancel-dialog.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StreamService } from '../services/stream.service';
+import { Routes } from '../routes';
 
 
 @Component({
@@ -15,7 +16,8 @@ import { StreamService } from '../services/stream.service';
 export class TransactionsComponent {
   selectedTransaction: OnetimeTransactionModel = {id: '-1'} as any;
 
-  constructor(public data: DataService, public dialog: MatDialog, private http: HttpClient, private streamService: StreamService) { }
+  constructor(public data: DataService, public dialog: MatDialog, private http: HttpClient,
+              private streamService: StreamService, public routes: Routes) { }
 
   transactionSelected(t: OnetimeTransactionModel) {
     if (this.selectedTransaction.id === t.id) {

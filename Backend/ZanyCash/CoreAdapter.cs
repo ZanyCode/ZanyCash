@@ -69,14 +69,9 @@ namespace ZanyCash
             t.Connect();
         }
 
-        public void AddOnetimeTransaction(OnetimeTransaction t)
+        public void RunCommand(Command c)
         {
-            commands.OnNext(NewCreateTransactionCommand(new Actions.CreateTransaction(Transaction.NewOnetimeTransaction(t))));
-        }
-
-        public void DeleteOnetimeTransaction(string id)
-        {
-            commands.OnNext(NewDeleteTransactionCommand(new Actions.DeleteTransaction(id)));
+            commands.OnNext(c);
         }
     }
 }

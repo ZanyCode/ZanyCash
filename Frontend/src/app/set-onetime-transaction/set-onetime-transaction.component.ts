@@ -13,10 +13,10 @@ import { switchMap, filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-set-transaction',
-  templateUrl: './set-transaction.component.html',
-  styleUrls: ['./set-transaction.component.scss']
+  templateUrl: './set-onetime-transaction.component.html',
+  styleUrls: ['./set-onetime-transaction.component.scss']
 })
-export class SetTransactionComponent implements OnInit {
+export class SetOnetimeTransactionComponent implements OnInit {
   addTransactionForm;
   checkoutForm;
   action = 'invalid';
@@ -80,7 +80,7 @@ export class SetTransactionComponent implements OnInit {
   async addTransaction(transaction) {
     const connectionId = await this.streamService.connectionId;
     const url = 'transaction/onetime-transaction';
-    const options = {headers: new HttpHeaders({ConnectionId: '123'})};
+    const options = {headers: new HttpHeaders({ConnectionId: connectionId})};
 
     const response$ = this.action === 'add' ?
        this.http.post<OnetimeTransactionModel>(url, transaction, options) :

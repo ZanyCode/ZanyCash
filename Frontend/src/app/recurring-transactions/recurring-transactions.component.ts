@@ -10,10 +10,10 @@ import { Routes } from '../routes';
 
 @Component({
   selector: 'app-transactions',
-  templateUrl: './transactions.component.html',
-  styleUrls: ['./transactions.component.scss']
+  templateUrl: './recurring-transactions.component.html',
+  styleUrls: ['./recurring-transactions.component.scss']
 })
-export class TransactionsComponent {
+export class RecurringTransactionsComponent {
   selectedTransaction: OnetimeTransactionModel = {id: '-1'} as any;
 
   constructor(public data: DataService, public dialog: MatDialog, private http: HttpClient,
@@ -39,7 +39,7 @@ export class TransactionsComponent {
         this.streamService.connectionId.then(connectionId => {
           this.http.delete<OnetimeTransactionModel>(
             'transaction/onetime-transaction/' + this.selectedTransaction.id,
-            {headers: new HttpHeaders({ConnectionId: '123'})})
+            {headers: new HttpHeaders({ConnectionId: connectionId})})
             .subscribe(res => this.selectedTransaction = {id: '-1'} as any);
         });
       }

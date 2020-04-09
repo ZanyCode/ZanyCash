@@ -23,7 +23,7 @@ namespace ZanyStreams
         public void ConnectToStream(string streamName)
         {
             var connectionId = this.Context.ConnectionId;
-            var stream = GetStream("123", streamName);
+            var stream = GetStream(connectionId, streamName);
             stream.Subscribe(x => this.context.Clients.Client(connectionId).SendAsync(streamName, x));
         }
 

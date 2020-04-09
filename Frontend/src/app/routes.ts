@@ -44,5 +44,7 @@ export class Routes
 {
     Default: Route;
     OnetimeTransactions: Route;
-    AddOnetimeTransaction: Route;
+    RecurringTransactions: Route;
+    SetOnetimeTransaction: Route;
+    SetRecurringTransaction: Route;
 }

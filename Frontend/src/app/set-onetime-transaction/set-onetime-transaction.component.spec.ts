@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SetTransactionComponent } from './set-transaction.component';
+import { SetOnetimeTransactionComponent } from './set-onetime-transaction.component';
 
 describe('AddTransactionComponent', () => {
-  let component: SetTransactionComponent;
-  let fixture: ComponentFixture<SetTransactionComponent>;
+  let component: SetOnetimeTransactionComponent;
+  let fixture: ComponentFixture<SetOnetimeTransactionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SetTransactionComponent ]
+      declarations: [ SetOnetimeTransactionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SetTransactionComponent);
+    fixture = TestBed.createComponent(SetOnetimeTransactionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

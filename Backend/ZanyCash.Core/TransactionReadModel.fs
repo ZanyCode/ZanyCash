@@ -21,6 +21,9 @@ let HandleEvent (state: State) = function
         { state with Transactions = updatedTransactionList }
     | _ -> state
 
+let GetTransactions (state: State) =
+    state.Transactions
+
 let QueryTransactionById (id: string) (state: State): Transaction =    
     state.Transactions |> List.filter (fun t -> t |> GetId = id) |> List.head
 

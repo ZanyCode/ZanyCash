@@ -31,8 +31,8 @@ namespace ZanyCash
             //services.AddConfiguration();
             var streamNames = new StreamNames();
             Configuration.Bind(streamNames);
-            services.AddSingleton(streamNames); 
-
+            services.AddSingleton(streamNames);
+            services.AddSingleton<IEventStore, EventStore>();
             services.AddControllers();
             services.AddStreams();
 
@@ -52,7 +52,7 @@ namespace ZanyCash
                 app.UseDeveloperExceptionPage();
             }
 
-
+            app.UseEventStore();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

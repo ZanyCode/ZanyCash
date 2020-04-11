@@ -73,9 +73,9 @@ namespace ZanyCash.Glue
                 PaymentIntervalTypeModel.yearly };
 
             int selectedIdx = 
-                @this.IsWeekly ? 0 : 1 + 
-                (@this.IsMonthly ? 0 : 2) + 
-                (@this.IsYearly ? 0 : 3);
+                @this.IsWeekly ? 1 : 0 + 
+                (@this.IsMonthly ? 2 : 0) + 
+                (@this.IsYearly ? 3 : 0);
 
             return enumValues[selectedIdx];
         }

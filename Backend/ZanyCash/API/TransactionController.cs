@@ -30,6 +30,14 @@ namespace ZanyCash.Controllers
             core.RunCommand(command);
         }
 
+        [HttpPost("recurring-transaction")]
+        public void AddRecurringTransaction([FromBody] RecurringTransactionModel transaction, [FromHeader(Name = "ConnectionId")]string connectionId)
+        {
+            var core = serviceLocator.GetRequiredService<CoreAdapter>(connectionId);
+            var command = NewCreateTransactionCommand(new Actions.CreateTransaction(Transaction.NewRecurringTransaction(transaction.ToDomain())));
+            core.RunCommand(command);
+        }
+
         [HttpPut("onetime-transaction")]
         public void UpdateOnetimeTransaction([FromBody] OnetimeTransactionModel transaction, [FromHeader(Name = "ConnectionId")]string connectionId)
         {
@@ -38,8 +46,24 @@ namespace ZanyCash.Controllers
             core.RunCommand(command);
         }
 
+        [HttpPut("recurring-transaction")]
+        public void UpdateRecurringTransaction([FromBody] RecurringTransactionModel transaction, [FromHeader(Name = "ConnectionId")]string connectionId)
+        {
+            var core = serviceLocator.GetRequiredService<CoreAdapter>(connectionId);
+            var command = NewUpdateTransactionCommand(new Actions.UpdateTransaction(Transaction.NewRecurringTransaction(transaction.ToDomain())));
+            core.RunCommand(command);
+        }
+
         [HttpDelete("onetime-transaction/{id}")]
         public void DeleteOnetimeTransaction(string id, [FromHeader(Name = "ConnectionId")]string connectionId)
+        {
+            var core = serviceLocator.GetRequiredService<CoreAdapter>(connectionId);
+            var command = NewDeleteTransactionCommand(new Actions.DeleteTransaction(id));
+            core.RunCommand(command);
+        }
+
+        [HttpDelete("recurring-transaction/{id}")]
+        public void DeleteRecurringTransaction(string id, [FromHeader(Name = "ConnectionId")]string connectionId)
         {
             var core = serviceLocator.GetRequiredService<CoreAdapter>(connectionId);
             var command = NewDeleteTransactionCommand(new Actions.DeleteTransaction(id));

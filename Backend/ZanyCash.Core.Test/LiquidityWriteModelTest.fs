@@ -23,4 +23,5 @@ type LiquidityWriteModelTest () =
             Assert.AreEqual(DateTime (2019,1,1), e.Head.Date)
         | _ -> 
             Assert.IsTrue(false)
+
         

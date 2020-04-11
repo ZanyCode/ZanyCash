@@ -17,14 +17,14 @@
   </tbody>
 </table>
 
-<a [routerLink]="[routes.SetRecurringTransaction.basePath + '/edit',{id: selectedTransaction.id}]" *ngIf="selectedTransaction.id != '-1'" mat-raised-button color="primary" style="position: fixed; left: 20px; bottom: 20px; width: 70px;">
+<a [routerLink]="[routes.SetOnetimeTransaction.basePath + '/edit',{id: selectedTransaction.id}]" *ngIf="selectedTransaction.id != '-1'" mat-raised-button color="primary" style="position: fixed; left: 20px; bottom: 20px; width: 70px;">
   <mat-icon>edit</mat-icon>
 </a>
 <button (click)="deleteSelectedTransaction()" *ngIf="selectedTransaction.id != '-1'" mat-raised-button color="warn" style="position: fixed; left: 95px; bottom: 20px; width: 70px;">
   <mat-icon>delete</mat-icon>
 </button>
 
-<a [routerLink]="[routes.SetRecurringTransaction.basePath, 'add']" mat-fab color="primary" style="position: fixed; right: 20px; bottom: 20px">
+<a [routerLink]="[routes.SetOnetimeTransaction.basePath, 'add']" mat-fab color="primary" style="position: fixed; right: 20px; bottom: 20px">
   <mat-icon>add</mat-icon>
 </a>
 

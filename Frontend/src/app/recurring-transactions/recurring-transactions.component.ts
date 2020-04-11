@@ -1,12 +1,52 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { DataService } from '../services/data.service';
-import { OnetimeTransactionModel, RecurringTransactionModel } from '../models';
+import { OnetimeTransactionModel, RecurringTransactionModel, PaymentAmountModel, PaymentIntervalModel, PaymentIntervalTypeModel } from '../models';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { OkCancelDialogComponent } from '../ok-cancel-dialog/ok-cancel-dialog.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StreamService } from '../services/stream.service';
 import { Routes } from '../routes';
 
+@Pipe({name: 'currentAmount'})
+export class CurrentAmountPipe implements PipeTransform {
+  transform(amounts: PaymentAmountModel[]): number {
+    if (amounts.length === 0) {
+      return 0;
+    }
+
+    const today = new Date();
+    if (amounts[0].date > today) {
+      return amounts[0].amount;
+    }
+
+    const relevantAmountIdx = amounts.findIndex(a => a.date > today) - 1;
+    return relevantAmountIdx < 0 ? amounts[amounts.length - 1].amount : amounts[relevantAmountIdx].amount;
+  }
+}
+
+
+@Pipe({name: 'interval'})
+export class IntervalPipe implements PipeTransform {
+  transform(interval: PaymentIntervalModel): string {
+    let intervalTypeString = '';
+    switch (interval.intervalType){
+      case PaymentIntervalTypeModel.daily:
+        intervalTypeString = 'Days';
+        break;
+      case PaymentIntervalTypeModel.weekly:
+        intervalTypeString = 'Weeks';
+        break;
+      case PaymentIntervalTypeModel.monthly:
+        intervalTypeString = 'Months';
+        break;
+      case PaymentIntervalTypeModel.yearly:
+        intervalTypeString = 'Years';
+        break;
+    }
+
+    return `Every ${interval.interval} ${intervalTypeString}`;
+  }
+}
 
 @Component({
   selector: 'app-transactions',
@@ -14,12 +54,12 @@ import { Routes } from '../routes';
   styleUrls: ['./recurring-transactions.component.scss']
 })
 export class RecurringTransactionsComponent {
-  selectedTransaction: OnetimeTransactionModel = {id: '-1'} as any;
+  selectedTransaction: RecurringTransactionModel = {id: '-1'} as any;
 
   constructor(public data: DataService, public dialog: MatDialog, private http: HttpClient,
               private streamService: StreamService, public routes: Routes) { }
 
-  transactionSelected(t: OnetimeTransactionModel) {
+  transactionSelected(t: RecurringTransactionModel) {
     if (this.selectedTransaction.id === t.id) {
       this.selectedTransaction = {id: '-1'} as any;
     }
@@ -38,7 +78,7 @@ export class RecurringTransactionsComponent {
       if (shouldDelete) {
         this.streamService.connectionId.then(connectionId => {
           this.http.delete<OnetimeTransactionModel>(
-            'transaction/onetime-transaction/' + this.selectedTransaction.id,
+            'transaction/recurring-transaction/' + this.selectedTransaction.id,
             {headers: new HttpHeaders({ConnectionId: connectionId})})
             .subscribe(res => this.selectedTransaction = {id: '-1'} as any);
         });

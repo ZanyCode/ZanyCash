@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import {formatDate} from '@angular/common';
-import { OnetimeTransactionModel } from '../models';
+import { OnetimeTransactionModel, RecurringTransactionModel, PaymentIntervalTypeModel } from '../models';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { StreamService } from '../services/stream.service';
@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Routes } from '../routes';
 import { DataService } from '../services/data.service';
 import { switchMap, filter, map } from 'rxjs/operators';
+import { RecurringTransactionsComponent } from '../recurring-transactions/recurring-transactions.component';
 
 
 @Component({
@@ -19,11 +20,11 @@ import { switchMap, filter, map } from 'rxjs/operators';
 export class SetRecurringTransactionComponent implements OnInit {
   addTransactionForm;
   checkoutForm;
-  action = 'invalid';
-  currentTransaction: OnetimeTransactionModel;
+  action = 'add';
+  currentTransaction: RecurringTransactionModel;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private http: HttpClient,
     private streamService: StreamService,
     private router: Router,
@@ -31,16 +32,17 @@ export class SetRecurringTransactionComponent implements OnInit {
     private route: ActivatedRoute,
     private data: DataService) {
 
-    this.checkoutForm = this.formBuilder.group({
-      name: '',
-      address: ''
+    this.addTransactionForm = this.fb.group({
+      id: undefined,
+      endDate: '2040-01-01',
+      description: 'dd',
+      interval: this.fb.group({ interval: 1, intervalType: PaymentIntervalTypeModel.monthly}),
+      // amounts: [{amount: 0, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')}]
+      amounts: this.fb.array([
+        fb.group({amount: 0, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')}),
+        fb.group({amount: 10, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')})
+      ])
     });
-
-    this.addTransactionForm = this.formBuilder.group({
-        date: formatDate(new Date(), 'yyyy-MM-dd', 'en'),
-        description: '',
-        amount: 3.50
-      });
   }
 
   ngOnInit(): void {
@@ -53,33 +55,42 @@ export class SetRecurringTransactionComponent implements OnInit {
         this.action = paramMap.get('action');
 
         if (this.action === 'add') {
-          this.addTransactionForm = this.formBuilder.group({
-            date: formatDate(new Date(), 'yyyy-MM-dd', 'en'),
-            description: '',
-            amount: 3.50
+          this.addTransactionForm = this.fb.group({
+            id: undefined,
+            endDate: '2040-01-01',
+            description: 'dd',
+            interval: this.fb.group({ interval: 1, intervalType: PaymentIntervalTypeModel.monthly}),
+            // amounts: [{amount: 0, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')}]
+            amounts: this.fb.array([
+              this.fb.group({amount: 0, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')}),
+              this.fb.group({amount: 10, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')})
+            ])
           });
         }
 
         if (this.action === 'edit' && paramMap.has('id')) {
           const id = paramMap.get('id');
-          this.data.onetimeTransactions$.pipe(
+          this.data.recurringTransactions$.pipe(
             map(tList => tList.find(t => t.id === id),
             filter(t => t !== undefined)))
             .subscribe(t => {
               this.currentTransaction = t;
-              this.addTransactionForm = this.formBuilder.group({
-                date: formatDate(t.date, 'yyyy-MM-dd', 'en'),
+              this.addTransactionForm = this.fb.group({
+                id: t.id,
+                endDate: formatDate(t.endDate, 'yyyy-MM-dd', 'en'),
                 description: t.description,
-                amount: t.amount
+                interval: this.fb.group({ interval: t.interval.interval, intervalType: t.interval.intervalType}),
+                amounts: this.fb.array(t.amounts.map(a => this.fb.group({amount: a.amount, date: formatDate(a.date, 'yyyy-MM-dd', 'en')})))
               });
             });
         }
       });
   }
 
-  async addTransaction(transaction) {
+  async addTransaction(transaction: RecurringTransactionModel) {
+    transaction.interval.intervalType = parseInt(transaction.interval.intervalType as any);
     const connectionId = await this.streamService.connectionId;
-    const url = 'transaction/onetime-transaction';
+    const url = 'transaction/recurring-transaction';
     const options = {headers: new HttpHeaders({ConnectionId: connectionId})};
 
     const response$ = this.action === 'add' ?
@@ -91,5 +102,18 @@ export class SetRecurringTransactionComponent implements OnInit {
        });
 
     this.router.navigateByUrl(this.routes.RecurringTransactions.path);
+  }
+
+  addAmount() {
+    this.addTransactionForm.get('amounts').push(this.fb.group({amount: 10, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')}));
+  }
+
+  removeAmount(i: number) {
+    const newAmounts = this.addTransactionForm.get('amounts').value.splice(i, 1);
+    // this.addTransactionForm.amounts = this.fb.array([
+    //   this.fb.group({amount: 0, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')}),
+    //   this.fb.group({amount: 10, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')})
+    // ]);
+    this.addTransactionForm.get('amounts').removeAt(i);
   }
 }

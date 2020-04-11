@@ -45,26 +45,37 @@ let private getNextDate (currentDate: DateTime) (paymentInterval: PaymentInterva
 
 let UnrollRecurringTransaction (startDay: DateTime) (endDay: DateTime) (recTransaction: RecurringTransaction) = 
     let endDay = if endDay < recTransaction.EndDate then endDay else recTransaction.EndDate
-    let rec getTransactionDates date =
-        match date > endDay with
-        | true -> []
-        | false -> date::getTransactionDates (getNextDate date recTransaction.Interval)
+    //let rec getTransactionDates date =
+    //      match date > endDay with
+    //      | true -> []
+    //      | false -> date::getTransactionDates (getNextDate date recTransaction.Interval)
+
+    let getTransactionDates date =
+        let rec loop (acc: DateTime list) date =
+            match date > endDay with
+            | true -> List.rev acc
+            | false -> 
+                let nextDate = getNextDate date recTransaction.Interval
+                loop (date::acc) nextDate
+        loop [] date
 
     let transactionDates = getTransactionDates (GetStartDate (RecurringTransaction recTransaction))
                             |> List.filter (fun d -> d >= startDay && d <= endDay)
 
-    let rec createOnetimeTransactions dates = 
-        match dates with
-        | [] -> []
-        | (current::remaining) ->
-            let amount = recTransaction.Amounts 
-                            |> List.filter (fun a -> a.Date <= current) 
-                            |> List.sortByDescending (fun a -> a.Date) 
-                            |> List.map (fun a -> a.Amount)
-                            |> List.head
+    let createOnetimeTransactions dates = 
+        let rec loop acc dates = 
+            match dates with
+            | [] -> List.rev acc
+            | (current::remaining) ->
+                let amount = recTransaction.Amounts 
+                                |> List.filter (fun a -> a.Date <= current) 
+                                |> List.sortByDescending (fun a -> a.Date) 
+                                |> List.map (fun a -> a.Amount)
+                                |> List.head
             
-            let onetimeTransaction = {Id=recTransaction.Id; Date = current; Description = recTransaction.Description; Amount = amount}
-            onetimeTransaction::createOnetimeTransactions remaining
+                let onetimeTransaction = {Id=recTransaction.Id; Date = current; Description = recTransaction.Description; Amount = amount}
+                loop (onetimeTransaction::acc) remaining
+        loop [] dates
     
     createOnetimeTransactions transactionDates     
 

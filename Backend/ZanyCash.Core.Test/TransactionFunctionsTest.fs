@@ -76,6 +76,21 @@ type TransactionFunctionsTest () =
         Assert.AreEqual(0, unrolledTransactions.Length);   
 
     [<TestMethod>]
+    member this.``Unrolling many transactions should succeed without stackoverflow``() =
+        let rTransaction = { 
+            Id="kj";       
+            EndDate = DateTime(2400, 01, 03);
+            Description = "Recurring Test"; 
+            Interval = PaymentInterval (1,Daily);
+            Amounts = [
+                        {Date=DateTime(2019, 01, 01); Amount=5.0}
+            ]
+        }
+
+        let unrolledTransactions = rTransaction |> UnrollRecurringTransaction (DateTime(2019, 01, 01)) (DateTime(2400, 01, 03))
+        Assert.IsTrue(true)
+
+    [<TestMethod>]
     member this.``Unrolling should only return Transactions within DateRange if partially before specified DateRange``() =
         let rTransaction = { 
                 Id="kj";

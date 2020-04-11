@@ -20,8 +20,8 @@ import {MatIconModule, MatIcon} from '@angular/material/icon';
 import { OkCancelDialogComponent } from './ok-cancel-dialog/ok-cancel-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { SetRecurringTransactionComponent } from './set-recurring-transaction/set-recurring-transaction.component';
-import { RecurringTransactionsComponent } from './recurring-transactions/recurring-transactions.component';
-
+import { RecurringTransactionsComponent, CurrentAmountPipe, IntervalPipe } from './recurring-transactions/recurring-transactions.component';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 @NgModule({
@@ -31,7 +31,9 @@ import { RecurringTransactionsComponent } from './recurring-transactions/recurri
     SetRecurringTransactionComponent,
     OnetimeTransactionsComponent,
     RecurringTransactionsComponent,
-    OkCancelDialogComponent
+    OkCancelDialogComponent,
+    CurrentAmountPipe,
+    IntervalPipe
   ],
   imports: [
     BrowserModule,
@@ -49,7 +51,8 @@ import { RecurringTransactionsComponent } from './recurring-transactions/recurri
     ReactiveFormsModule,
     HttpClientModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

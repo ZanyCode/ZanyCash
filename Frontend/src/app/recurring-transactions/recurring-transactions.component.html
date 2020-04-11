@@ -2,17 +2,19 @@
   <thead>
   <tr>
     <th scope="col">#</th>
-    <th scope="col">Date</th>
     <th scope="col">Description</th>
+    <th scope="col">EndDate</th>
+    <th scope="col">Interval</th>
     <th scope="col">Amount</th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let t of data.onetimeTransactions$ | async; index as i" (click)="transactionSelected(t)" [ngClass]="{'selected': selectedTransaction.id == t.id}">
+  <tr *ngFor="let t of data.recurringTransactions$ | async; index as i" (click)="transactionSelected(t)" [ngClass]="{'selected': selectedTransaction.id == t.id}">
     <th scope="row">{{ t.id }}</th>
-    <td>{{ t.date | date: 'yyyy-MM-dd' }}</td>
     <td>{{ t.description }}</td>
-    <td> {{ t.amount | number }}</td>
+    <td>{{ t.endDate | date: 'yyyy-MM-dd' }}</td>    
+    <td>{{ t.interval | interval }}</td>    
+    <td>{{ t.amounts | currentAmount }}</td>    
   </tr>
   </tbody>
 </table>

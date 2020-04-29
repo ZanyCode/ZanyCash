@@ -24,6 +24,7 @@
     "@angular/router": "~9.1.0",
     "@microsoft/signalr": "^3.1.3",
     "@ng-bootstrap/ng-bootstrap": "^6.0.2",
+    "n26-api": "^0.1.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

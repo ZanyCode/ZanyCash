@@ -47,4 +47,5 @@ export class Routes
     RecurringTransactions: Route;
     SetOnetimeTransaction: Route;
     SetRecurringTransaction: Route;
+    LiquidityDashboard: Route;
 }

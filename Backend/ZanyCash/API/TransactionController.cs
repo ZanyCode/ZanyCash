@@ -69,5 +69,17 @@ namespace ZanyCash.Controllers
             var command = NewDeleteTransactionCommand(new Actions.DeleteTransaction(id));
             core.RunCommand(command);
         }
+
+        [HttpPut("liquidity/date-range")]
+        public void UpdateLiquidityDateRange([FromHeader(Name = "ConnectionId")]string connectionId, [FromQuery]DateTime startDate, [FromQuery]DateTime endDate)
+        {
+            var core = serviceLocator.GetRequiredService<CoreAdapter>(connectionId);
+            core.SetLiquidityDateRange(startDate, endDate);
+        }
+
+        //[HttpPut("liquidity/date-range")]
+        //public void UpdateLiquidityDateRange([FromHeader(Name = "ConnectionId")]string connectionId)
+        //{
+        //}
     }
 }

@@ -9,5 +9,6 @@ namespace ZanyCash
     {
         public string recurringTransactions { get; set; }
         public string onetimeTransactions { get; set; }
+        public string liquidity { get; set; }
     }
 }

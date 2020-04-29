@@ -1,4 +1,5 @@
 {
   "onetimeTransactions": "onetimeTransactions",
-  "recurringTransactions": "recurringTransactions"
+  "recurringTransactions": "recurringTransactions",
+  "liquidity": "liquidity"
 }

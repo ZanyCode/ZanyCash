@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Include="TransactionFunctionsTest.fs" />
     <Compile Include="LiquidityFunctionsTest.fs" />
+    <Compile Include="LiquidityReadModelTest.fs" />
     <Compile Include="LiquidityWriteModelTest.fs" />
   </ItemGroup>
 

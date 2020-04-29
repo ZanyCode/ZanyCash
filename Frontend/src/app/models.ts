@@ -52,3 +52,16 @@ export interface RecurringTransactionModel
 
     amounts: PaymentAmountModel[];
 }
+
+export interface DayLiquidityModel
+{
+    date: Date | string;
+
+    dailyMinimum: number;
+
+    startLiquidity: number;
+
+    endLiquidity: number;
+
+    transactions: OnetimeTransactionModel[];
+}

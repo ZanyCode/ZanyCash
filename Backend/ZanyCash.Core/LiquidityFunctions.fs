@@ -24,11 +24,17 @@ let ToDayLiquidities startDay endDay transactions =
                                     (dayTransactions |> List.filter (fun f -> f.Amount < 0.) |> List.sumBy (fun f->f.Amount))
                                 
                 let endOfDayLiquidity = initialValue + (dayTransactions |> List.sumBy (fun f->f.Amount))
-                let dayLiquidity = {Date=currentDay; DailyMinimum=minLiquidity; Transactions=dayTransactions}
+                let dayLiquidity = {
+                    Date=currentDay; DailyMinimum=minLiquidity; StartLiquidity=initialValue;
+                    EndLiquidity=endOfDayLiquidity; Transactions=dayTransactions
+                }
                 let newLiquidities = dayLiquidity::currentLiquidities
                 getDayLiquidities endOfDayLiquidity nextDay remaining newLiquidities
             | _ ->
-                let dayLiquidity = {Date=currentDay; DailyMinimum=initialValue; Transactions=[]}
+                let dayLiquidity = {
+                    Date=currentDay; DailyMinimum=initialValue; StartLiquidity=initialValue;
+                    EndLiquidity=initialValue; Transactions=[]                    
+                }
                 let newLiquidities = dayLiquidity::currentLiquidities
                 getDayLiquidities initialValue nextDay transactionDays newLiquidities                        
 

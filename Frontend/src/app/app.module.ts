@@ -22,6 +22,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { SetRecurringTransactionComponent } from './set-recurring-transaction/set-recurring-transaction.component';
 import { RecurringTransactionsComponent, CurrentAmountPipe, IntervalPipe } from './recurring-transactions/recurring-transactions.component';
 import {MatDividerModule} from '@angular/material/divider';
+import { LiquidityDashboardComponent } from './liquidity-dashboard/liquidity-dashboard.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {MatDividerModule} from '@angular/material/divider';
     RecurringTransactionsComponent,
     OkCancelDialogComponent,
     CurrentAmountPipe,
-    IntervalPipe
+    IntervalPipe,
+    LiquidityDashboardComponent
   ],
   imports: [
     BrowserModule,

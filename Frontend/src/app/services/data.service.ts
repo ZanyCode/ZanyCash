@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StreamService, Error } from './stream.service';
-import { TransactionModel, OnetimeTransactionModel, RecurringTransactionModel } from '../models';
+import { TransactionModel, OnetimeTransactionModel, RecurringTransactionModel, DayLiquidityModel } from '../models';
 import { Observable, Subject } from 'rxjs';
 import { filter, map, tap, scan, shareReplay } from 'rxjs/operators';
 import StreamNames from '../../../../Backend/ZanyCash/streamNames.json';
@@ -22,6 +22,10 @@ export class DataService {
 
   get recurringTransactions$() {
     return this.getStream<RecurringTransactionModel[]>(StreamNames.recurringTransactions);
+  }
+
+  get liquidity$() {
+    return this.getStream<DayLiquidityModel[]>(StreamNames.liquidity);
   }
 
   public errorSubject: Subject<ErrorUpdate> = new Subject<ErrorUpdate>();

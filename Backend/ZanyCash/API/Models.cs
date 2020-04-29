@@ -62,6 +62,19 @@ namespace ZanyCash.Glue
         public IEnumerable<PaymentAmountModel> amounts { get; set; }
     }
 
+    public class DayLiquidityModel
+    {
+        public DateTime date { get; set; }
+
+        public double dailyMinimum { get; set; }
+
+        public double startLiquidity { get; set; }
+
+        public double endLiquidity { get; set; }
+
+        public IEnumerable<OnetimeTransactionModel> transactions { get; set; }
+    }
+
     public static class MappingExtensions
     {
         public static PaymentIntervalTypeModel ToModel(this PaymentIntervalType @this)
@@ -130,13 +143,7 @@ namespace ZanyCash.Glue
             switch (@this)
             {
                 case Transaction.OnetimeTransaction ot:
-                    var otModel = new OnetimeTransactionModel
-                    {
-                        id = ot.Item.Id,
-                        amount = ot.Item.Amount,
-                        date = ot.Item.Date,
-                        description = ot.Item.Description
-                    };
+                    var otModel = ot.Item.ToModel();
 
                     return new TransactionModel { isOnetimeTransaction = true, onetimeTransaction = otModel };
                 case Transaction.RecurringTransaction rt:
@@ -155,6 +162,17 @@ namespace ZanyCash.Glue
             throw new Exception("Error while mapping transaction: Invalid case");
         }
     
+        public static OnetimeTransactionModel ToModel(this OnetimeTransaction @this)
+        {
+            return new OnetimeTransactionModel
+            {
+                id = @this.Id,
+                amount = @this.Amount,
+                date = @this.Date,
+                description = @this.Description
+            };
+        }
+
         public static OnetimeTransaction ToDomain(this OnetimeTransactionModel @this)
         {
             return new OnetimeTransaction(@this.id, @this.date, @this.description, @this.amount);
@@ -171,7 +189,18 @@ namespace ZanyCash.Glue
             return @this.isOnetimeTransaction ?
                 Transaction.NewOnetimeTransaction(@this.onetimeTransaction.ToDomain()) :
                 Transaction.NewRecurringTransaction(@this.recurringTransaction.ToDomain());
+        }
 
+        public static DayLiquidityModel ToModel(this DayLiquidity @this)
+        {
+            return new DayLiquidityModel
+            {
+                date = @this.Date,
+                dailyMinimum = @this.DailyMinimum,
+                startLiquidity = @this.StartLiquidity,
+                endLiquidity = @this.EndLiquidity,
+                transactions = @this.Transactions.Select(t => t.ToModel())
+            };
         }
     }
 }

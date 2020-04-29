@@ -31,8 +31,7 @@ type Error =
     | Unexpected of Exception
     | AggregateError of Error list
 
-type DayLiquidity = { Date: DateTime; DailyMinimum: float; Transactions: OnetimeTransaction list }
-type Balance = { Date: DateTime; Amount: float }
+type DayLiquidity = { Date: DateTime; DailyMinimum: float; StartLiquidity: float; EndLiquidity: float; Transactions: OnetimeTransaction list }
 
 module Actions =
     type CreateTransaction = { Transaction: Transaction }

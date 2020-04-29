@@ -1,0 +1,41 @@
+<div class="container" style="height: 100%;">
+    <div class="row justify-content-center">    
+        <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input type="date" value="2000-01-01" matInput (change)="startDateChanged($event)">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>End Date</mat-label>
+            <input type="date" matInput value="2030-01-01" (change)="endDateChanged($event)">
+        </mat-form-field>
+    </div>
+
+    <div class="row justify-content-center">    
+        <div id="liquidityPlot" #liquidityPlot class="col-12"></div>
+    </div>
+
+    <div class="row justify-content-center">    
+        <table class="table table-striped col-12">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let t of transactions$ | async; index as i">
+              <th scope="row">{{ t.id }}</th>
+              <td>{{ t.date | date: 'yyyy-MM-dd' }}</td>
+              <td>{{ t.description }}</td>
+              <td> {{ t.amount | number }}</td>
+            </tr>
+            </tbody>
+          </table>
+    </div>
+</div>
+
+  
+  

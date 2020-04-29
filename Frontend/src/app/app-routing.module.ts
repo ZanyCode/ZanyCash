@@ -7,13 +7,15 @@ import { OkCancelDialogComponent } from './ok-cancel-dialog/ok-cancel-dialog.com
 import { Routes, Route } from './routes';
 import { SetRecurringTransactionComponent } from './set-recurring-transaction/set-recurring-transaction.component';
 import { RecurringTransactionsComponent } from './recurring-transactions/recurring-transactions.component';
+import { LiquidityDashboardComponent } from './liquidity-dashboard/liquidity-dashboard.component';
 
 const routes: Routes = {
   Default: new Route({ path: '', redirectTo: '/onetime-transactions', pathMatch: 'full', display: false}),
   OnetimeTransactions: new Route({ path: 'onetime-transactions', component:  OnetimeTransactionsComponent, display: true, label: 'Single Transactions'}),
   RecurringTransactions: new Route({ path: 'recurring-transactions', component:  RecurringTransactionsComponent, display: true, label: 'Recurring Transactions'}),
   SetOnetimeTransaction: new Route({ path: 'onetime-transactions/:action', component:  SetOnetimeTransactionComponent, display: false}),
-  SetRecurringTransaction: new Route({ path: 'recurring-transactions/:action', component: SetRecurringTransactionComponent, display: false})
+  SetRecurringTransaction: new Route({ path: 'recurring-transactions/:action', component: SetRecurringTransactionComponent, display: false}),
+  LiquidityDashboard: new Route({ path: 'liquidity-dashboard', component: LiquidityDashboardComponent, display: true, label: 'Liquidity'})
 };
 
 export const appRouting = RouterModule.forRoot(Object.values(routes));

@@ -28,4 +28,4 @@ let QueryTransactionById (id: string) (state: State): Transaction =
     state.Transactions |> List.filter (fun t -> t |> GetId = id) |> List.head
 
 let QueryTransactionsWithinDaterange (startDay: DateTime) (endDay: DateTime) (state: State): Transaction list =        
-    state.Transactions |> List.filter (TransactionWithin startDay endDay)
+    state.Transactions |> List.filter (TransactionWithin startDay endDay) 

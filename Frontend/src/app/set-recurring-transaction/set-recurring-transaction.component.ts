@@ -63,7 +63,6 @@ export class SetRecurringTransactionComponent implements OnInit {
             // amounts: [{amount: 0, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')}]
             amounts: this.fb.array([
               this.fb.group({amount: 0, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')}),
-              this.fb.group({amount: 10, date: formatDate(new Date(), 'yyyy-MM-dd', 'en')})
             ])
           });
         }

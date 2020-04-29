@@ -15,8 +15,11 @@ namespace ZanyCash
     public class CoreAdapter
     {
         public IObservable<FSharpList<Transaction>> Transactions { get; }
+        public IObservable<FSharpList<DayLiquidity>> Liquidity { get; }
 
         private Subject<Command> commands = new Subject<Command>();
+        private BehaviorSubject<(DateTime, DateTime)> liquidityDateRange = 
+            new BehaviorSubject<(DateTime, DateTime)>((new DateTime(2000,1,1), new DateTime(2030,1,1)));
 
         private readonly IEventStore eventStore;
 
@@ -44,10 +47,8 @@ namespace ZanyCash
 
             var liquidityReadState = events.Scan(LiquidityReadModel.GetInitialState(), LiquidityReadModel.HandleEvent).ReplayConnect(1);
 
-            int eventCount = 0;
             var liquidityWriteState = events.Scan(LiquidityWriteModel.GetInitialState(), (state, evt) =>
             {
-                Console.WriteLine(eventCount);
                 var (newState, newEvent) = LiquidityWriteModel.HandleEvent(state, evt);
                 if (newEvent != null)
                     sideEffectEvents.OnNext(newEvent.Value);
@@ -55,40 +56,19 @@ namespace ZanyCash
                 return newState;
             }).ReplayConnect(1);
 
+
             var (pastEvents, futureEvents) = this.eventStore.Subscribe("zanycash");
             foreach (var e in pastEvents)
                 this.commands.OnNext(JsonConvert.DeserializeObject<Command>(e));
 
             futureEvents.Subscribe(e => this.commands.OnNext(JsonConvert.DeserializeObject<Command>(e)));
-
-            //connection = EventStoreConnection.Create(new Uri("tcp://admin:changeit@localhost:1113"));
-            //connection.ConnectAsync().Wait();
-
-            //// Load initial events
-            //StreamEventsSlice currentSlice;
-            //long nextSliceStart = StreamPosition.Start;
-            //do
-            //{
-            //    currentSlice =
-            //    connection.ReadStreamEventsForwardAsync("zanycash", nextSliceStart, 200, false).Result;
-            //    nextSliceStart = currentSlice.NextEventNumber;
-            //    foreach (var evt in currentSlice.Events)
-            //    {
-            //        var command = JsonConvert.DeserializeObject<Command>(Encoding.UTF8.GetString(evt.Event.Data));
-            //        this.commands.OnNext(command);
-            //        eventCount++;
-            //        Console.WriteLine("EventCount: " + eventCount);
-            //    }
-            //} while (!currentSlice.IsEndOfStream);
-
-            //connection.SubscribeToStreamFrom("zanycash", eventCount-1, CatchUpSubscriptionSettings.Default, (_, x) =>
-            //{
-            //    var command = JsonConvert.DeserializeObject<Command>(Encoding.UTF8.GetString(x.Event.Data));
-            //    this.commands.OnNext(command);
-            //});
-
-            var t = transactionReadState.Select(TransactionReadModel.GetTransactions);
-            this.Transactions = t;
+   
+            this.Transactions = transactionReadState.Select(TransactionReadModel.GetTransactions);
+            this.Liquidity = liquidityReadState.CombineLatest(liquidityDateRange, (state, dateRange) =>
+            {
+                var (startDate, endDate) = dateRange;
+                return LiquidityReadModel.QueryLiquidityWithinDaterange(startDate, endDate, state);
+            });
         }
 
         public void RunCommand(Command c)
@@ -96,6 +76,11 @@ namespace ZanyCash
             var streamName = "zanycash";
             var data = JsonConvert.SerializeObject(c);
             eventStore.Publish(streamName, data);
+        }
+
+        public void SetLiquidityDateRange(DateTime startDate, DateTime endDate)
+        {
+            this.liquidityDateRange.OnNext((startDate, endDate));
         }
     }
 

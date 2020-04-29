@@ -1,12 +1,9 @@
-﻿using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using ZanyCash.Glue;
 using ZanyStreams;
-using static ZanyCash.Core.Types;
 
 namespace ZanyCash.API
 {
@@ -37,7 +34,11 @@ namespace ZanyCash.API
                     .Select(MappingExtensions.ToModel)
                     .Where(t=>!t.isOnetimeTransaction)
                     .Select(t=>t.recurringTransaction))
-                .ToStream(streamNames.recurringTransactions)
+                .ToStream(streamNames.recurringTransactions),
+
+                core.Liquidity
+                    .Select(dayLiquidities => dayLiquidities.Select(MappingExtensions.ToModel))
+                    .ToStream(streamNames.liquidity)
             };
         }
     }

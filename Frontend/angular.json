@@ -129,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "ZanyCash"
+  "defaultProject": "ZanyCash",
+  "cli": {
+    "analytics": "c099aeb7-be40-4fbf-88a7-793226191125"
+  }
 }

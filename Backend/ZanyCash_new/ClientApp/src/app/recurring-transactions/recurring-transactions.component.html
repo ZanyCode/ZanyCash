@@ -1,0 +1,32 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Description</th>
+    <th scope="col">EndDate</th>
+    <th scope="col">Interval</th>
+    <th scope="col">Amount</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let t of data.recurringTransactions$ | async; index as i" (click)="transactionSelected(t)" [ngClass]="{'selected': selectedTransaction.id == t.id}">
+    <th scope="row">{{ t.id }}</th>
+    <td>{{ t.description }}</td>
+    <td>{{ t.endDate | date: 'yyyy-MM-dd' }}</td>    
+    <td>{{ t.interval | interval }}</td>    
+    <td>{{ t.amounts | currentAmount }}</td>    
+  </tr>
+  </tbody>
+</table>
+
+<a [routerLink]="['/' + routes.RecurringTransactions + '/edit',{id: selectedTransaction.id}]" *ngIf="selectedTransaction.id != '-1'" mat-raised-button color="primary" style="position: fixed; left: 20px; bottom: 20px; width: 70px;">
+  <mat-icon>edit</mat-icon>
+</a>
+<button (click)="deleteSelectedTransaction()" *ngIf="selectedTransaction.id != '-1'" mat-raised-button color="warn" style="position: fixed; left: 95px; bottom: 20px; width: 70px;">
+  <mat-icon>delete</mat-icon>
+</button>
+
+<a [routerLink]="['/' + routes.RecurringTransactions, 'add']" mat-fab color="primary" style="position: fixed; right: 20px; bottom: 20px">
+  <mat-icon>add</mat-icon>
+</a>
+

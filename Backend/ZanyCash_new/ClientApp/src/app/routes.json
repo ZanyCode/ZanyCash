@@ -1,6 +1,0 @@
-{
-    "OnetimeTransactions": "onetime-transactions",
-    "SetOnetimeTransaction": "onetime-transactions/:action",
-    "RecurringTransactions": "recurring-transactions",
-    "SetRecurringTransactions": "recurring-transactions/:action"
-}

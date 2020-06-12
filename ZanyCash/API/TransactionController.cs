@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ZanyCash.Glue;
@@ -11,6 +12,7 @@ using static ZanyCash.Core.Types.Command;
 
 namespace ZanyCash.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class TransactionController : ControllerBase
@@ -20,6 +22,12 @@ namespace ZanyCash.Controllers
         public TransactionController( IScopedServiceLocator serviceLocator)
         {
             this.serviceLocator = serviceLocator;
+        }
+
+        [HttpGet("onetime-transaction")]
+        public int GetOnetimeTransaction()
+        {
+            return 42;
         }
 
         [HttpPost("onetime-transaction")]

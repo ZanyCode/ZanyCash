@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import {formatDate} from '@angular/common';
 import { OnetimeTransactionModel } from '../models';
@@ -29,7 +29,8 @@ export class SetOnetimeTransactionComponent implements OnInit {
     private streamService: StreamService,
     private router: Router,
     private route: ActivatedRoute,
-    private data: DataService) {
+    private data: DataService,
+    @Inject('BASE_URL') private baseUrl: string) {
 
     this.checkoutForm = this.formBuilder.group({
       name: '',
@@ -81,7 +82,7 @@ export class SetOnetimeTransactionComponent implements OnInit {
 
   async addTransaction(transaction) {
     const connectionId = await this.streamService.connectionId;
-    const url = 'transaction/onetime-transaction';
+    const url = this.baseUrl + 'transaction/onetime-transaction';
     const options = {headers: new HttpHeaders({ConnectionId: connectionId})};
 
     const response$ = this.action === 'add' ?
@@ -91,6 +92,7 @@ export class SetOnetimeTransactionComponent implements OnInit {
     response$.subscribe(x => {
          console.log(x);
        });
+
 
     this.router.navigateByUrl(this.routes.OnetimeTransactions);
   }

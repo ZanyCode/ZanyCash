@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {formatDate} from '@angular/common';
 import { OnetimeTransactionModel, RecurringTransactionModel, PaymentIntervalTypeModel } from '../models';
@@ -29,7 +29,8 @@ export class SetRecurringTransactionComponent implements OnInit {
     private streamService: StreamService,
     private router: Router,
     private route: ActivatedRoute,
-    private data: DataService) {
+    private data: DataService,
+    @Inject('BASE_URL') private baseUrl: string) {
 
     this.routes = Routes;
     this.addTransactionForm = this.fb.group({
@@ -89,7 +90,7 @@ export class SetRecurringTransactionComponent implements OnInit {
   async addTransaction(transaction: RecurringTransactionModel) {
     transaction.interval.intervalType = parseInt(transaction.interval.intervalType as any);
     const connectionId = await this.streamService.connectionId;
-    const url = 'transaction/recurring-transaction';
+    const url = this.baseUrl + 'transaction/recurring-transaction';
     const options = {headers: new HttpHeaders({ConnectionId: connectionId})};
 
     const response$ = this.action === 'add' ?

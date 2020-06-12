@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { formatDate } from '@angular/common';
@@ -15,7 +15,8 @@ declare var Plotly: any;
 })
 export class LiquidityDashboardComponent implements OnInit {
 
-  constructor(public data: DataService, private http: HttpClient, private streamService: StreamService) { }
+  constructor(public data: DataService, private http: HttpClient, private streamService: StreamService,
+    @Inject('BASE_URL') private baseUrl: string) { }
 
   @ViewChild('liquidityPlot', { static: true })
   plot: any;
@@ -91,7 +92,7 @@ export class LiquidityDashboardComponent implements OnInit {
           .append('endDate', formatDate(this.endDate, 'yyyy-MM-dd', 'en'));
 
         this.http.put<any>(
-          'transaction/liquidity/date-range',
+          this.baseUrl + 'transaction/liquidity/date-range',
           {},
           {headers: new HttpHeaders({ConnectionId: connectionId}), params})
           .subscribe(x => console.log(x));

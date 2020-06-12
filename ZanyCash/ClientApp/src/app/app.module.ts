@@ -28,6 +28,7 @@ import { OkCancelDialogComponent } from './ok-cancel-dialog/ok-cancel-dialog.com
 import { RecurringTransactionsComponent, IntervalPipe, CurrentAmountPipe } from './recurring-transactions/recurring-transactions.component';
 import { SetRecurringTransactionComponent } from './set-recurring-transaction/set-recurring-transaction.component';
 import { LiquidityDashboardComponent } from './liquidity-dashboard/liquidity-dashboard.component';
+import { FetchDataComponent } from './fetch-data/fetch-data.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { LiquidityDashboardComponent } from './liquidity-dashboard/liquidity-das
     RecurringTransactionsComponent,
     SetRecurringTransactionComponent,
     LiquidityDashboardComponent,
+    FetchDataComponent,
     CurrentAmountPipe,
     IntervalPipe,
   ],
@@ -51,6 +53,7 @@ import { LiquidityDashboardComponent } from './liquidity-dashboard/liquidity-das
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: Routes.OnetimeTransactions, component: OnetimeTransactionsComponent, canActivate: [AuthorizeGuard]  },
       { path: Routes.SetOnetimeTransaction, component: SetOnetimeTransactionComponent, canActivate: [AuthorizeGuard] },
       { path: Routes.RecurringTransactions, component: RecurringTransactionsComponent, canActivate: [AuthorizeGuard] },

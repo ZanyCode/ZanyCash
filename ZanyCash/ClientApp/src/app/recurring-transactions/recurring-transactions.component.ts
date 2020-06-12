@@ -1,4 +1,4 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform, Inject } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { OnetimeTransactionModel, RecurringTransactionModel, PaymentAmountModel, PaymentIntervalModel, PaymentIntervalTypeModel } from '../models';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -58,21 +58,20 @@ export class RecurringTransactionsComponent {
   selectedTransaction: RecurringTransactionModel = {id: '-1'} as any;
 
   constructor(public data: DataService, public dialog: MatDialog, private http: HttpClient,
-              private streamService: StreamService) {
-                this.routes = Routes
+              private streamService: StreamService,
+              @Inject('BASE_URL') private baseUrl: string) {
+                this.routes = Routes;
                }
 
   transactionSelected(t: RecurringTransactionModel) {
     if (this.selectedTransaction.id === t.id) {
       this.selectedTransaction = {id: '-1'} as any;
-    }
-    else {
+    } else {
       this.selectedTransaction = t;
     }
   }
 
-  deleteSelectedTransaction()
-  {
+  deleteSelectedTransaction() {
     const dialogRef = this.dialog.open(OkCancelDialogComponent, {
       data: {caption: 'Delete Transaction', text: `Do you really want to delete Transaction #${this.selectedTransaction.id}? This can not be undone.`}
     });
@@ -81,7 +80,7 @@ export class RecurringTransactionsComponent {
       if (shouldDelete) {
         this.streamService.connectionId.then(connectionId => {
           this.http.delete<OnetimeTransactionModel>(
-            'transaction/recurring-transaction/' + this.selectedTransaction.id,
+            this.baseUrl + 'transaction/recurring-transaction/' + this.selectedTransaction.id,
             {headers: new HttpHeaders({ConnectionId: connectionId})})
             .subscribe(res => this.selectedTransaction = {id: '-1'} as any);
         });

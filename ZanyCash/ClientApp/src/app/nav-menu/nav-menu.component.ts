@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import Routes from '../routes.json'
+import Routes from '../routes.json';
 
 @Component({
   selector: 'app-nav-menu',

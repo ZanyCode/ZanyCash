@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import Routes from '../routes.json'
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,6 +8,11 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  routes: typeof Routes;
+
+  constructor() {
+    this.routes = Routes;
+  }
 
   collapse() {
     this.isExpanded = false;

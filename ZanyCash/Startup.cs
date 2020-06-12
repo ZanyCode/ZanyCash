@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using ZanyCash.Data;
 using ZanyCash.Models;
@@ -77,11 +73,8 @@ namespace ZanyCash
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            //if (!env.IsDevelopment())
-            //{
-            //    app.UseSpaStaticFiles();
-            //}
 
             app.UseRouting();
             app.UseEventStore();
@@ -104,12 +97,7 @@ namespace ZanyCash
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
-
-                //if (env.IsDevelopment())
-                //{
-                //    spa.UseAngularCliServer(npmScript: "start");
-                //}
+                spa.Options.SourcePath = "ClientApp";          
             });
         }
     }

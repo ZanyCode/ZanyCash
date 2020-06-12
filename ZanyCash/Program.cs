@@ -24,7 +24,7 @@ namespace ZanyCash
                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    //webBuilder.UseUrls("https://0.0.0.0:5001", "http://0.0.0.0:5000");
+                    webBuilder.UseUrls("https://0.0.0.0:5001", "http://0.0.0.0:5000");
                     webBuilder.UseStartup<Startup>();
                 });
     }

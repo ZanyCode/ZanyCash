@@ -17,14 +17,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OnetimeTransactionsComponent } from './onetime-transactions/onetime-transactions.component';
-import Routes from './routes.json'
+import Routes from './routes.json';
 import { SetOnetimeTransactionComponent } from './set-onetime-transaction/set-onetime-transaction.component';
 import { OkCancelDialogComponent } from './ok-cancel-dialog/ok-cancel-dialog.component';
 import { RecurringTransactionsComponent, IntervalPipe, CurrentAmountPipe } from './recurring-transactions/recurring-transactions.component';
@@ -37,9 +35,7 @@ import { LiquidityDashboardComponent } from './liquidity-dashboard/liquidity-das
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     OkCancelDialogComponent,
-    FetchDataComponent,
     OnetimeTransactionsComponent,
     SetOnetimeTransactionComponent,
     RecurringTransactionsComponent,
@@ -54,9 +50,7 @@ import { LiquidityDashboardComponent } from './liquidity-dashboard/liquidity-das
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', component: LiquidityDashboardComponent, pathMatch: 'full' },
-      // { path: 'counter', component: CounterComponent },
-      // { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+      { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: Routes.OnetimeTransactions, component: OnetimeTransactionsComponent, canActivate: [AuthorizeGuard]  },
       { path: Routes.SetOnetimeTransaction, component: SetOnetimeTransactionComponent, canActivate: [AuthorizeGuard] },
       { path: Routes.RecurringTransactions, component: RecurringTransactionsComponent, canActivate: [AuthorizeGuard] },
@@ -74,7 +68,7 @@ import { LiquidityDashboardComponent } from './liquidity-dashboard/liquidity-das
     ReactiveFormsModule,
     MatIconModule,
     MatDialogModule,
-    MatDividerModule    
+    MatDividerModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }

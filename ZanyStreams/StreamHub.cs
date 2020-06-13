@@ -26,7 +26,7 @@ namespace ZanyStreams
         {
             var connectionId = this.Context.ConnectionId;
             var userId = this.Context.UserIdentifier;
-            var stream = GetStream(connectionId, streamName);
+            var stream = GetStream(userId, streamName);
             stream.Subscribe(x => this.context.Clients.Client(connectionId).SendAsync(streamName, x));
         }
 

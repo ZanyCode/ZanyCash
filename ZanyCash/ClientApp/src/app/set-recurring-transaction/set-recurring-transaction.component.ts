@@ -89,13 +89,11 @@ export class SetRecurringTransactionComponent implements OnInit {
 
   async addTransaction(transaction: RecurringTransactionModel) {
     transaction.interval.intervalType = parseInt(transaction.interval.intervalType as any);
-    const connectionId = await this.streamService.connectionId;
     const url = this.baseUrl + 'transaction/recurring-transaction';
-    const options = {headers: new HttpHeaders({ConnectionId: connectionId})};
 
     const response$ = this.action === 'add' ?
-       this.http.post<OnetimeTransactionModel>(url, transaction, options) :
-       this.http.put<OnetimeTransactionModel>(url, {...transaction, id: this.currentTransaction.id }, options);
+       this.http.post<OnetimeTransactionModel>(url, transaction) :
+       this.http.put<OnetimeTransactionModel>(url, {...transaction, id: this.currentTransaction.id });
 
     response$.subscribe(x => {
          console.log(x);

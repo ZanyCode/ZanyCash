@@ -21,7 +21,6 @@ export class Result<T> {
 export class StreamService {
   private connection: Promise<HubConnection>;
   private streams: Map<string, Observable<any>> = new Map<string, Observable<any>>();
-  public connectionId: Promise<string>;
 
   constructor(private authorizeService: AuthorizeService) {}
 
@@ -35,7 +34,6 @@ export class StreamService {
         .build();
 
         await connection.start();
-        this.connectionId = connection.invoke('GetConnectionId');
         res(connection);
       });
     }

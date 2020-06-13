@@ -85,18 +85,14 @@ export class LiquidityDashboardComponent implements OnInit {
   }
 
   updateLiquidityDates() {
-    this.streamService.connectionId.then(connectionId => {
-        const params =
+    const params =
           new HttpParams()
           .append('startDate', formatDate(this.startDate, 'yyyy-MM-dd', 'en'))
           .append('endDate', formatDate(this.endDate, 'yyyy-MM-dd', 'en'));
 
-        this.http.put<any>(
-          this.baseUrl + 'transaction/liquidity/date-range',
-          {},
-          {headers: new HttpHeaders({ConnectionId: connectionId}), params})
-          .subscribe(x => console.log(x));
-    });
+    this.http.put<any>(
+      this.baseUrl + 'transaction/liquidity/date-range', {}, {params})
+      .subscribe(x => console.log(x));
 
     // const params = new HttpParams();
     // params.append('startDate', formatDate(this.startDate, 'yyyy-MM-dd', 'en'));

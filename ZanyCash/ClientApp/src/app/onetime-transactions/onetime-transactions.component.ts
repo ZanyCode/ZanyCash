@@ -41,12 +41,9 @@ export class OnetimeTransactionsComponent {
 
     dialogRef.afterClosed().subscribe((shouldDelete: boolean) => {
       if (shouldDelete) {
-        this.streamService.connectionId.then(connectionId => {
-          this.http.delete<OnetimeTransactionModel>(
-            this.baseUrl + 'transaction/onetime-transaction/' + this.selectedTransaction.id,
-            {headers: new HttpHeaders({ConnectionId: connectionId})})
-            .subscribe(res => this.selectedTransaction = {id: '-1'} as any);
-        });
+        this.http.delete<OnetimeTransactionModel>(
+          this.baseUrl + 'transaction/onetime-transaction/' + this.selectedTransaction.id)
+          .subscribe(res => this.selectedTransaction = {id: '-1'} as any);
       }
     });
   }

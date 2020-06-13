@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ZanyStreams
 {
+    [Authorize]
     public class StreamHub : Hub
     {
         private readonly IHubContext<StreamHub> context;
@@ -24,6 +25,7 @@ namespace ZanyStreams
         public void ConnectToStream(string streamName)
         {
             var connectionId = this.Context.ConnectionId;
+            var userId = this.Context.UserIdentifier;
             var stream = GetStream(connectionId, streamName);
             stream.Subscribe(x => this.context.Clients.Client(connectionId).SendAsync(streamName, x));
         }

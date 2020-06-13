@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { publishReplay, shareReplay } from 'rxjs/operators';
+import { publishReplay, shareReplay, take } from 'rxjs/operators';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { AuthorizeService } from 'src/api-authorization/authorize.service';
 
 export class Error {
   message: string;
@@ -22,11 +23,15 @@ export class StreamService {
   private streams: Map<string, Observable<any>> = new Map<string, Observable<any>>();
   public connectionId: Promise<string>;
 
+  constructor(private authorizeService: AuthorizeService) {}
+
   private async getConnection() {
     if (!this.connection) {
       this.connection = new Promise(async res => {
+        const loginToken = await this.authorizeService.getAccessToken().pipe(take(1)).toPromise();
         const connection = new HubConnectionBuilder()
-        .withUrl('/streams')
+        .withUrl('/streams', { accessTokenFactory: () => loginToken })
+        // .withUrl('/streams')
         .build();
 
         await connection.start();

@@ -38,7 +38,7 @@ namespace ZanyCash
             do
             {
                 currentSlice =
-                connection.ReadStreamEventsForwardAsync("zanycash", nextSliceStart, 200, false).Result;
+                connection.ReadStreamEventsForwardAsync(eventStream, nextSliceStart, 200, false).Result;
                 nextSliceStart = currentSlice.NextEventNumber;
                 foreach (var evt in currentSlice.Events)
                 {
@@ -50,7 +50,7 @@ namespace ZanyCash
             // Subscribe to Future events
             var futureEvents = Observable.Create<string>(observer =>
             {
-                var subscription = connection.SubscribeToStreamFrom("zanycash", eventCount - 1, CatchUpSubscriptionSettings.Default, (_, x) =>
+                var subscription = connection.SubscribeToStreamFrom(eventStream, eventCount - 1, CatchUpSubscriptionSettings.Default, (_, x) =>
                 {
                     observer.OnNext(Encoding.UTF8.GetString(x.Event.Data));
                 });

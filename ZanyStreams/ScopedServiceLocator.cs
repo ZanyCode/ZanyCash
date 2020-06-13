@@ -43,7 +43,11 @@ namespace ZanyStreams
         private void EnsureScopeExists(string scopeName)
         {
             if (!scopedProviders.ContainsKey(scopeName))
-                scopedProviders.Add(scopeName, rootProvider.CreateScope().ServiceProvider);
+            {
+                var provider = rootProvider.CreateScope().ServiceProvider;
+                provider.GetRequiredService<IScopeProvider>().SetScopeName(scopeName);
+                scopedProviders.Add(scopeName, provider);
+            }
         }
     }
 }

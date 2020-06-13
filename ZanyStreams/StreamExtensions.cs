@@ -14,6 +14,7 @@ namespace ZanyStreams
             services.AddSignalR();
 
             services.AddSingleton<IScopedServiceLocator, ScopedServiceLocator>();
+            services.AddScoped<IScopeProvider, ScopeProvider>();
             return services;
         }
 

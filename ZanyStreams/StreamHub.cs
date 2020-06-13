@@ -30,11 +30,6 @@ namespace ZanyStreams
             stream.Subscribe(x => this.context.Clients.Client(connectionId).SendAsync(streamName, x));
         }
 
-        public string GetConnectionId()
-        {
-            return this.Context.ConnectionId;
-        }
-
         private IObservable<Result> GetStream(string scopeName, string streamName)
         {
             var publishers = this.serviceLocator.GetServices<IStreamPublisher>(scopeName);

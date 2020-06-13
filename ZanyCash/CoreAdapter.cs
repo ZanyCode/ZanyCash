@@ -1,4 +1,5 @@
 ﻿using EventStore.ClientAPI;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.FSharp.Collections;
 using Newtonsoft.Json;
 using System;
@@ -7,6 +8,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using ZanyCash.Core;
+using ZanyStreams;
 using static ZanyCash.Core.Types;
 using static ZanyCash.Core.Types.Command;
 
@@ -22,9 +24,12 @@ namespace ZanyCash
             new BehaviorSubject<(DateTime, DateTime)>((new DateTime(2000,1,1), new DateTime(2030,1,1)));
 
         private readonly IEventStore eventStore;
+        private string streamName;
 
-        public CoreAdapter(IEventStore eventStore)
+        public CoreAdapter(IEventStore eventStore, IScopeProvider scopeProvider)
         {
+            var userId = scopeProvider.GetScopeName();
+            this.streamName = $"zanycash-{userId}";
             this.eventStore = eventStore;
 
             var sideEffectEvents = new Subject<Event>();
@@ -57,7 +62,7 @@ namespace ZanyCash
             }).ReplayConnect(1);
 
 
-            var (pastEvents, futureEvents) = this.eventStore.Subscribe("zanycash");
+            var (pastEvents, futureEvents) = this.eventStore.Subscribe(this.streamName);
             foreach (var e in pastEvents)
                 this.commands.OnNext(JsonConvert.DeserializeObject<Command>(e));
 
@@ -73,9 +78,8 @@ namespace ZanyCash
 
         public void RunCommand(Command c)
         {
-            var streamName = "zanycash";
             var data = JsonConvert.SerializeObject(c);
-            eventStore.Publish(streamName, data);
+            eventStore.Publish(this.streamName, data);
         }
 
         public void SetLiquidityDateRange(DateTime startDate, DateTime endDate)

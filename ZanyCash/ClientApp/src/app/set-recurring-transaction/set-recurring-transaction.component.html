@@ -4,57 +4,39 @@
         <form id="addTransactionForm"
             [formGroup]="addTransactionForm" (ngSubmit)="addTransaction(addTransactionForm.value)" style="margin-top: 20px;">      
 
-            <mat-form-field>
-                <mat-label>Description</mat-label>
-                <input formControlName="description"  id="description" type="text" matInput>
-            </mat-form-field>
+            <h6 class="text-muted">Description</h6>
+            <input formControlName="description" id="description" type="text" class="form-control" >
             <br />
-
-            <div class="card" style="padding: 0.2rem; margin-bottom: 10px;">
-                <h6 class="card-subtitle mb-2 text-muted">Payment Interval</h6>
-                <div class="card-body" style="padding: 0px;" formGroupName="interval">
-                    Every <br />
-                    <mat-form-field>
-                        <input formControlName="interval"  id="description" type="number" matInput>
-                    </mat-form-field>
-                    <br />
-                    <mat-form-field>
-                        <select matNativeControl formControlName="intervalType">
-                            <option value=0>Days</option>
-                            <option value=1>Weeks</option>
-                            <option value=2>Months</option>
-                            <option value=3>Years</option>
-                        </select>
-                    </mat-form-field>
-                    <br />
-                </div>
+            <h6 class="text-muted">Payment Interval</h6>
+            <div class="card-body" style="padding: 0px;" formGroupName="interval">
+                Every <br />
+                <input formControlName="interval"  id="description" type="number" class="form-control" style="display: inline; width: 30%;">
+                <select formControlName="intervalType" class="form-control" style="display: inline; width: 70%;">
+                    <option value=0>Days</option>
+                    <option value=1>Weeks</option>
+                    <option value=2>Months</option>
+                    <option value=3>Years</option>
+                </select>
             </div>
-
-            <div class="card" style="padding: 0.2rem; margin-bottom: 10px;">
-                <h6 class="card-subtitle mb-2 text-muted">Amounts</h6>
-                
-                <div class="card-body" style="padding: 0px;">
-                    <div formArrayName="amounts"
-                        *ngFor="let item of addTransactionForm.get('amounts').controls; let i = index;">
-                        <div [formGroupName]="i">
-                            <input type="date" formControlName="date" placeholder="Date">
-                            <input formControlName="amount" type="number" placeholder="Amount" style="width: 10%;">
-                            <button *ngIf="addTransactionForm.get('amounts').controls.length > 1" (click)="removeAmount(i)" mat-button color="primary" style="width: 3rem;">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="button" (click)="addAmount()" mat-button color="primary" style="width: 3rem;">
-                        <mat-icon>add</mat-icon>
+            <br />
+            <h6 class="text-muted">Amounts</h6>                
+            <div formArrayName="amounts"
+                *ngFor="let item of addTransactionForm.get('amounts').controls; let i = index;">
+                <div [formGroupName]="i">                    
+                    <input formControlName="amount" class="form-control" type="number" placeholder="Amount" style="display: inline; width: 20%;">
+                    <span>€, Starting </span>
+                    <input type="date" formControlName="date" placeholder="Date" class="form-control" style="display: inline; width: 60%;">
+                    <button *ngIf="addTransactionForm.get('amounts').controls.length > 1" (click)="removeAmount(i)" 
+                        mat-button color="primary">
+                        <mat-icon>delete</mat-icon>
                     </button>
                 </div>
-            </div>        
-
-            <mat-form-field >
-                <mat-label>End Date</mat-label>
-                <input formControlName="endDate" id="endDate" type="date" matInput placeholder="Date of Transaction">
-            </mat-form-field>
+            </div>
+            <button type="button" (click)="addAmount()" class="btn btn-primary">Add Amount</button>
+            <br />
+            <br />
+            <h6 class="text-muted">End Date</h6>                
+            <input formControlName="endDate" id="endDate" type="date" class="form-control" placeholder="Date of Transaction">
             <br />
         </form>       
         </div>     

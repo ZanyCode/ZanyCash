@@ -1,23 +1,19 @@
 <div class="container" style="height: 100%;"> 
     <form id="addTransactionForm" class="example-form" style="position: absolute; top: 45%; left: 50%; transform: translateY(-50%) translateX(-50%)"
             [formGroup]="addTransactionForm" (ngSubmit)="addTransaction(addTransactionForm.value)">
-        <mat-form-field >
-            <mat-label>Date</mat-label>
-            <input formControlName="date" id="date" type="date" matInput placeholder="Date of Transaction">
-        </mat-form-field>
-        <br />
-
-        <mat-form-field>
-            <mat-label>Description</mat-label>
-            <input formControlName="description"  id="description" type="text" matInput>
-        </mat-form-field>
-        <br />
-
-        <mat-form-field>
-            <mat-label>Amount</mat-label>
-            <input formControlName="amount"  id="amount" type="number" matInput>
-        </mat-form-field>
-    </form>              
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input class="form-control" formControlName="date" id="date" type="date" placeholder="Date of Transaction">
+        </div>    
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input class="form-control" formControlName="description"  id="description" type="text">
+        </div>  
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input class="form-control" formControlName="amount"  id="amount" type="number">
+        </div>  
+    </form>
 
     <a [routerLink]="'/' + routes.OnetimeTransactions" mat-raised-button color="warn"  style="position:absolute; right: 6rem; bottom: 0.5rem; width: 5rem;">
         <mat-icon>cancel</mat-icon>
